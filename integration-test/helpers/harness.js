@@ -41,23 +41,8 @@ const setup = async (ops) => {
     // for some reason we need to init a blank page
     // before the extension is initialized
     await browser.newPage()
-    const targets = await browser.targets()
-    let bgPage
-
-    // grab a handle on the background page for the extension
-    // we can't use the long ID as it could possibly change
-    for (const t of targets) {
-        const title = t._targetInfo.title
-
-        if (title === 'DuckDuckGo Privacy Essentials') {
-            bgPage = await t.page()
-            break
-        }
-    }
-
-    if (!bgPage) {
-        throw new Error('couldn\'t get background page')
-    }
+    const bgTarget = await browser.waitForTarget(t => t.type() === 'background_page')
+    const bgPage = await bgTarget.page()
 
     const requests = []
 

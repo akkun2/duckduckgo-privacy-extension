@@ -4,9 +4,7 @@
 
 /* global dbg:false */
 const harness = require('../helpers/harness')
-const http = require('http')
-const fs = require('fs')
-const path = require('path')
+const { setupServer } = require('../helpers/server')
 
 let browser
 let bgPage
@@ -79,21 +77,6 @@ describe('Canvas verification', () => {
     })
 })
 
-function setupServer (redirects, port) {
-    return http.createServer(function (req, res) {
-        const url = new URL(req.url, `http://${req.headers.host}`)
-        fs.readFile(path.join(__dirname, 'pages', url.pathname), (err, data) => {
-            if (err) {
-                res.writeHead(404)
-                res.end(JSON.stringify(err))
-                return
-            }
-            res.writeHead(200)
-            res.end(data)
-        })
-    }).listen(port)
-}
-
 async function getFingerprintOfContext (ctx) {
     await ctx.addScriptTag({ path: 'node_modules/@fingerprintjs/fingerprintjs/dist/fp.js' })
     return ctx.evaluate(() => {
@@ -115,8 +98,8 @@ let server2
 describe('First Party Fingerprint Randomization', () => {
     beforeAll(async () => {
         ({ browser, bgPage } = await harness.setup())
-        server = setupServer({}, 8080)
-        server2 = setupServer({}, 8081)
+        server = await setupServer({}, 8080)
+        server2 = await setupServer({}, 8081)
 
         // wait for HTTPs to successfully load
         await bgPage.waitForFunction(

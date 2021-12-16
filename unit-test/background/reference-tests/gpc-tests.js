@@ -5,7 +5,7 @@ const tdsStorage = require('../../../shared/js/background/storage/tds.es6')
 
 const Site = require('../../../shared/js/background/classes/site.es6')
 const GPC = require('../../../shared/js/background/GPC.es6')
-const gpcContentScript = require('../../../shared/js/content-scope/gpc-protection')
+const gpcContentScript = require('../../../shared/js/content-scope/features/gpc')
 const browserWrapper = require('../../../shared/js/background/wrapper.es6')
 const settings = require('../../../shared/js/background/settings.es6')
 

@@ -4,28 +4,10 @@
 
 /* global dbg:false */
 const harness = require('../helpers/harness')
+const { setupServer } = require('../helpers/server')
 
 let browser
 let bgPage
-
-const http = require('http')
-const fs = require('fs')
-const path = require('path')
-
-function setupServer (redirects, port) {
-    return http.createServer(function (req, res) {
-        const url = new URL(req.url, `http://${req.headers.host}`)
-        fs.readFile(path.join(__dirname, 'pages', url.pathname), (err, data) => {
-            if (err) {
-                res.writeHead(404)
-                res.end(JSON.stringify(err))
-                return
-            }
-            res.writeHead(200)
-            res.end(data)
-        })
-    }).listen(port)
-}
 
 function getGPCValueOfContext (ctx) {
     return ctx.evaluate(() => {
@@ -39,24 +21,25 @@ const frameTests = [
     'http://127.0.0.1:8081',
     'http://127.0.0.1:8080'
 ]
+
 let server
 let server2
 
 describe('Ensure GPC is injected into frames', () => {
     beforeAll(async () => {
         ({ browser, bgPage } = await harness.setup())
-        server = setupServer({}, 8080)
-        server2 = setupServer({}, 8081)
+        server = await setupServer({}, 8080)
+        server2 = await setupServer({}, 8081)
 
         // wait for HTTPs to successfully load
         await bgPage.waitForFunction(
             () => window.dbg && dbg.https.isReady,
-            { polling: 100, timeout: 6000 }
+            { polling: 100, timeout: 10000 }
         )
     })
     afterAll(async () => {
-        await server.close()
-        await server2.close()
+        server.close()
+        server2.close()
         await harness.teardown(browser)
     })
 

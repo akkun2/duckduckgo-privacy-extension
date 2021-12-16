@@ -31,12 +31,13 @@ export async function loadProtections () {
         'fingerprintingHardware',
         'referrer',
         'fingerprintingScreenSize',
-        'fingerprintingTemporaryStorage'
+        'fingerprintingTemporaryStorage',
+        'navigatorNamespace'
     ]
 
     for (const protectionName of protectionNames) {
         const filename = protectionName.replace(/([a-zA-Z])(?=[A-Z0-9])/g, '$1-').toLowerCase()
-        const protection = import(`./${filename}-protection.js`).then(({ init, load, update }) => {
+        const protection = import(`./features/${filename}.js`).then(({ init, load, update }) => {
             if (load) {
                 load()
             }

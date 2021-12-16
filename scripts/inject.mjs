@@ -13,7 +13,7 @@ async function generateContentScope() {
         mozProxies = true;
     }
     const inputOptions = {
-        input: 'shared/js/content-scope/protections.js',
+        input: 'shared/js/content-scope/content-scope.js',
         plugins: [
             resolve(),
             dynamicImportVariables({}),
