@@ -1,6 +1,6 @@
 import { defineProperty } from '../utils'
 
-export function load () {
+export function init () {
     try {
         if (navigator.ddg) return
         defineProperty(Navigator.prototype, 'ddg', {

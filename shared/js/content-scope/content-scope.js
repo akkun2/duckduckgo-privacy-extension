@@ -32,7 +32,7 @@ export async function loadProtections () {
         'referrer',
         'fingerprintingScreenSize',
         'fingerprintingTemporaryStorage',
-        'navigatorNamespace'
+        'navigatorInterface'
     ]
 
     for (const protectionName of protectionNames) {
