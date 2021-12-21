@@ -27,7 +27,9 @@ describe('Ensure navigator.ddg is injected', () => {
         // page.on('console', (msg) => console.log('PAGE LOG:', msg.text()))
         await page.goto(`http://127.0.0.1:${server.port}/blank.html`, { waitUntil: 'networkidle0' })
         const result = await page.evaluate(
-            () => navigator.ddg.isExtension(),
+            () => {
+                return navigator.duckduckgo.isExtension() && navigator.duckduckgo.isDuckDuckGo()
+            },
             { polling: 100, timeout: 1000 }
         )
         expect(result).toEqual(true)

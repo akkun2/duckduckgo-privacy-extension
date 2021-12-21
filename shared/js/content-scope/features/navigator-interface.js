@@ -2,10 +2,13 @@ import { defineProperty } from '../utils'
 
 export function init () {
     try {
-        if (navigator.ddg) return
-        defineProperty(Navigator.prototype, 'ddg', {
+        if (navigator.duckduckgo) return
+        defineProperty(Navigator.prototype, 'duckduckgo', {
             value: {
                 isExtension () {
+                    return true
+                },
+                isDuckDuckGo () {
                     return true
                 }
             },
